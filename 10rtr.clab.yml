@@ -1,0 +1,143 @@
+name: 10rtr
+
+topology:
+  nodes:
+    R1:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "63"
+        graph-posY: "21"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.418835713027981"
+        graph-geoCoordinateLng: "9.688719883383611"
+    R2:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "147"
+        graph-posY: "21"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+    R3:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "231"
+        graph-posY: "21"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+    R4:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "315"
+        graph-posY: "21"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+    R5:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "399"
+        graph-posY: "21"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+    R6:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "63"
+        graph-posY: "105"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+    R7:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "147"
+        graph-posY: "105"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+    R8:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "231"
+        graph-posY: "105"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+    R9:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "315"
+        graph-posY: "105"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+    R10:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "399"
+        graph-posY: "105"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+    R11:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "175"
+        graph-posY: "63"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+    R12:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:24.2R1-S2.5
+      labels:
+        graph-posX: "287"
+        graph-posY: "63"
+        graph-icon: pe
+        graph-groupLabelPos: bottom-center
+        graph-geoCoordinateLat: "49.243204607946936"
+        graph-geoCoordinateLng: "9.790373384200215"
+  links:
+    # inter-switch link
+    - endpoints: [ R1:eth1, R2:eth1 ]
+    - endpoints: [ R6:eth1, R7:eth1 ]
+    - endpoints: [ R2:eth3, R7:eth3 ]
+    - endpoints: [ R3:eth3, R8:eth3 ]
+    - endpoints: [ R4:eth3, R9:eth3 ]
+    - endpoints: [ R2:eth2, R3:eth2 ]
+    - endpoints: [ R3:eth1, R4:eth1 ]
+    - endpoints: [ R4:eth2, R5:eth2 ]
+    - endpoints: [ R1:eth3, R6:eth3 ]
+    - endpoints: [ R7:eth2, R8:eth2 ]
+    - endpoints: [ R8:eth1, R9:eth1 ]
+    - endpoints: [ R9:eth2, R10:eth2 ]
+    - endpoints: [ R5:eth3, R10:eth3 ]
+    - endpoints: [ R11:eth1, R3:eth4 ]
+    - endpoints: [ R11:eth2, R8:eth4 ]
+    - endpoints: [ R12:eth1, R3:eth5 ]
+    - endpoints: [ R12:eth2, R8:eth5 ]

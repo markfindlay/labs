@@ -1,0 +1,27 @@
+replace: interfaces {
+    {% for interface, data in hostvars[inventory_hostname]['interfaces']['core'].items() %}
+    {{interface}} {
+        {% for unit, address in data.items() %}
+        unit {{unit}} {
+            family inet {
+                address {{address}};
+            }
+        }
+        {% endfor %}
+    }
+    {% endfor -%}
+    fxp0 {                              
+        unit 0 {
+            family inet {
+                address 10.0.0.15/24;
+            }
+        }
+    }
+    lo0 {
+        unit 0 {
+            family inet {
+                address {{hostvars[inventory_hostname]['interfaces']["loopback"]["lo0"][0]}};
+            }
+        }
+    }
+}

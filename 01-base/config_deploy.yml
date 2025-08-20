@@ -1,0 +1,12 @@
+---
+- name: Deploy config
+  hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: Deploy pre-rendered config from config directory
+    junipernetworks.junos.junos_config:
+       src: config/{{inventory_hostname}}.conf
+       src_format: "text"
+       update: "replace"
+        

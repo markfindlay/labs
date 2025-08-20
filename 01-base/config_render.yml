@@ -1,0 +1,10 @@
+---
+- name: Render config
+  hosts: all
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: Build base config
+    ansible.builtin.template:
+       src: templates/base.jinja
+       dest: config/{{inventory_hostname}}.conf
