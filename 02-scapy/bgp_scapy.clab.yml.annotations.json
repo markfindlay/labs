@@ -1,0 +1,29 @@
+{
+  "freeTextAnnotations": [],
+  "groupStyleAnnotations": [],
+  "cloudNodeAnnotations": [
+    {
+      "id": "host:R1_eth1",
+      "type": "host",
+      "label": "host:R1_eth1",
+      "position": {
+        "x": 7,
+        "y": 7
+      }
+    }
+  ],
+  "nodeAnnotations": [
+    {
+      "id": "R1",
+      "icon": "router",
+      "position": {
+        "x": 77,
+        "y": 119
+      },
+      "geoCoordinates": {
+        "lat": 48.932081043477666,
+        "lng": 9.018205893867203
+      }
+    }
+  ]
+}
