@@ -8,23 +8,17 @@ def bgp_server(quit_server: threading.Event):
     s=socket.socket()
     s.connect(("10.255.255.2",179))
     ss=StreamSocket(s,Raw)
-    BGPAS = bgp.BGPConf
     BGPO = bgp.BGPOpen()
     BGPH = bgp.BGPHeader()
-    BGP_MP=bgp.BGPCapMultiprotocol()
-    BGP_MP.afi=1
-    BGP_MP.safi=1
-    BGP_MP.reserved=00
-    BGP_OPT = bgp.BGPOptParam()
-    BGP_OPT.param_value=BGP_MP
+    bgp_capability_MP_v4_unicast = bgp.BGPCapMultiprotocol()
+    bgp_capability_MP_v4_unicast.afi=1
+    bgp_capability_MP_v4_unicast.safi=1
+    bgp_capability_MP_v4_unicast.reserved=00
     bgp_open = BGPH/BGPO
     bgp_open.my_as=1
     bgp_open.hold_time=90
     bgp_open.bgp_id="10.255.255.1"
-    #bgp_open.opt_params=bgp.BGPOptParam(bgp.BGPOptParamPacketListField([BGP_MP]))
-    bgp_open.opt_params=[bgp.BGPOptParam(param_value=BGP_MP)]
-    #bgp_open.hold_time=90
-    #bgp_open.show()
+    bgp_open.opt_params=[bgp.BGPOptParam(param_value=bgp_capability_MP_v4_unicast)]
     result = ss.sr(bgp_open)
     print(result)
     result = ss.sr(bgp.BGPKeepAlive())
@@ -43,12 +37,9 @@ def bgp_server(quit_server: threading.Event):
                 ss.sr(bgp.BGPKeepAlive())
         except EOFError as e:
             ss.close()
-            print(e)
             print(f"End of stream - exception thrown. {e}")
             sys.exit()
         time.sleep(0.5)
-    #result.show()
-    #s = TCP_client.tcplink(Raw, "www.test.com", 179)
 
 def main():
     quit_server = threading.Event()
