@@ -3,6 +3,8 @@ from scapy.contrib import bgp
 import socket
 import time 
 import threading
+import base64
+
 
 def bgp_server(quit_server: threading.Event):
     s=socket.socket()
@@ -19,26 +21,34 @@ def bgp_server(quit_server: threading.Event):
     bgp_open.hold_time=90
     bgp_open.bgp_id="10.255.255.1"
     bgp_open.opt_params=[bgp.BGPOptParam(param_value=bgp_capability_MP_v4_unicast)]
-    result = ss.sr(bgp_open)
-    print(result)
-    result = ss.sr(bgp.BGPKeepAlive())
-    print(result)
+    out = ss.send(bgp_open)
+    bgp_packet = bgp.BGP(ss.recv().getlayer(Raw).load)
+    if bgp_packet:
+        print(f"[INFO] Got BGP packet type: {bgp_packet.type}")
+        bgp_packet.show()
+    out = ss.send(bgp.BGPKeepAlive())
+    bgp_packet = bgp.BGP(ss.recv().getlayer(Raw).load)
+    if bgp_packet:
+        print(f"[INFO] Got BGP packet type: {bgp_packet.type}")
+        bgp_packet.show()
     keepalive_timer = time.time()
     while True:
-        print("Start of loop.")
         if quit_server.is_set():
             print("Received server stop event...")
             ss.close()
-            sys.exit()
+            break
         try:
-            print(ss.recv())
+            bgp_packet = bgp.BGP(ss.recv().getlayer(Raw).load)
+            if bgp_packet.type == 4:
+                print ("[INFO] Got a keepalive")
+            #bgp_packet.show()
             if time.time() - keepalive_timer > 30:
                 keepalive_timer = time.time()
-                ss.sr(bgp.BGPKeepAlive())
+                ss.send(bgp.BGPKeepAlive())
         except EOFError as e:
             ss.close()
-            print(f"End of stream - exception thrown. {e}")
-            sys.exit()
+            print(f"[ERROR] End of stream - exception thrown. {e}")
+            break
         time.sleep(0.5)
 
 def main():
@@ -50,9 +60,9 @@ def main():
     while True:
         cmd = input(">")
         if cmd == "quit":
-            print("Sending stop signal to BGP thread...")
+            print("[INFO] Sending stop signal to BGP thread...")
             quit_server.set()
-            print("Waiting for BGP thread...")
+            print("[INFO] Waiting for BGP thread...")
             bgp_thread.join()
             break
 
