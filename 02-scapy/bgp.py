@@ -21,26 +21,33 @@ def bgp_server(quit_server: threading.Event):
     bgp_open.hold_time=90
     bgp_open.bgp_id="10.255.255.1"
     bgp_open.opt_params=[bgp.BGPOptParam(param_value=bgp_capability_MP_v4_unicast)]
-    out = ss.send(bgp_open)
+    ss.send(bgp_open)
+    bgp_packet = bgp.BGP(ss.recv().getlayer(Raw).load)
+
+    if bgp_packet:
+        print(f"[INFO] Got BGP packet type: {bgp_packet.type}")
+        #bgp_packet.show()
+
+    ss.send(bgp.BGPKeepAlive())
+
     bgp_packet = bgp.BGP(ss.recv().getlayer(Raw).load)
     if bgp_packet:
         print(f"[INFO] Got BGP packet type: {bgp_packet.type}")
-        bgp_packet.show()
-    out = ss.send(bgp.BGPKeepAlive())
-    bgp_packet = bgp.BGP(ss.recv().getlayer(Raw).load)
-    if bgp_packet:
-        print(f"[INFO] Got BGP packet type: {bgp_packet.type}")
-        bgp_packet.show()
+        #bgp_packet.show()
     keepalive_timer = time.time()
+    s.setblocking(False)
     while True:
         if quit_server.is_set():
             print("Received server stop event...")
             ss.close()
             break
         try:
-            bgp_packet = bgp.BGP(ss.recv().getlayer(Raw).load)
-            if bgp_packet.type == 4:
-                print ("[INFO] Got a keepalive")
+            try:
+                bgp_packet = bgp.BGP(ss.recv().getlayer(Raw).load)
+                if bgp_packet.type == 4:
+                    print ("[INFO] Got a keepalive")
+            except BlockingIOError:
+                pass
             #bgp_packet.show()
             if time.time() - keepalive_timer > 30:
                 keepalive_timer = time.time()
